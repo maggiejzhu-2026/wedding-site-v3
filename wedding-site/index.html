@@ -91,141 +91,72 @@
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    const { useState } = React;
+    const { useState, useEffect } = React;
 
     // ── Guest list with +1 info (edit this list) ──
     const GUEST_LIST = [
-  { name: "Adrien", plusOne: true, plusOneName: "Kath Jacome" },
-  { name: "Ahron Seeman", plusOne: true, plusOneName: "Lindsey +1" },
-  { name: "Alaina", plusOne: false },
-  { name: "Ally Mcelwain", plusOne: true, plusOneName: "Mike Culmone" },
-  { name: "Amy Huang", plusOne: true, plusOneName: "Kevin Yang" },
-  { name: "Ana", plusOne: false },
-  { name: "Andrea Pinto", plusOne: true, plusOneName: "Jairo Pinto" },
-  { name: "Andrew (Marina) Shields", plusOne: false },
-  { name: "Andy Lu", plusOne: true, plusOneName: "Saydee +1" },
-  { name: "Andy Zhu", plusOne: false },
-  { name: "Anna (Kieran)", plusOne: false },
-  { name: "Anna Schwartz", plusOne: false },
-  { name: "Anne", plusOne: false },
-  { name: "Anusha Kalaichelvan", plusOne: true, plusOneName: "Jeremy Singh" },
-  { name: "Ben", plusOne: false },
-  { name: "Ben Walker", plusOne: false },
-  { name: "Bradley Declaire", plusOne: true, plusOneName: "Sarah Barabas" },
-  { name: "Brendan Power", plusOne: true, plusOneName: "Caro Buchanan" },
-  { name: "Brian", plusOne: false },
-  { name: "Brianne McTaggart", plusOne: true, plusOneName: "Duncan McTaggart" },
-  { name: "Caro Buchanan", plusOne: true, plusOneName: "Brendan Power" },
-  { name: "Cary Pomeroy", plusOne: true, plusOneName: "Isabelle +1" },
-  { name: "Cat Wierzba", plusOne: false },
-  { name: "Celine Plante", plusOne: false },
-  { name: "Chanelle", plusOne: false },
-  { name: "Chris (Kat'S Bf)", plusOne: false },
-  { name: "Chris Weller", plusOne: true, plusOneName: "Jessica +1" },
-  { name: "Claire", plusOne: false },
-  { name: "Colin Foley", plusOne: false },
-  { name: "Daisy (Elly)", plusOne: true, plusOneName: "Elly" },
-  { name: "Dan Boulanger", plusOne: false },
-  { name: "Dan Ophagh", plusOne: true, plusOneName: "Steph Ling" },
-  { name: "Danielle", plusOne: false },
-  { name: "David", plusOne: false },
-  { name: "Donald Wu", plusOne: true, plusOneName: "Julia Chen" },
-  { name: "Dpc", plusOne: false },
-  { name: "Duncan McTaggart", plusOne: true, plusOneName: "Brianne McTaggart" },
-  { name: "Duncan Tooley", plusOne: true, plusOneName: "Mary-Liz Power" },
-  { name: "Dustin Zhang", plusOne: true, plusOneName: "Jimin +1" },
-  { name: "Elia", plusOne: false },
-  { name: "Elly", plusOne: true, plusOneName: "Daisy (Elly)" },
-  { name: "Emlyn Folks", plusOne: false },
-  { name: "Emma Harris", plusOne: true, plusOneName: "Luke Morassut" },
-  { name: "Erika Tsang", plusOne: false },
-  { name: "Fil", plusOne: false },
-  { name: "Garren", plusOne: true, plusOneName: "Jessica Pan" },
-  { name: "George McTaggart", plusOne: true, plusOneName: "Sabrina McTaggart" },
-  { name: "Harold", plusOne: false },
-  { name: "Harrison Reilly", plusOne: false },
-  { name: "Holly", plusOne: false },
-  { name: "Ian", plusOne: false },
-  { name: "Iris Wu", plusOne: false },
-  { name: "Jairo Pinto", plusOne: true, plusOneName: "Andrea Pinto" },
-  { name: "Jake", plusOne: false },
-  { name: "Jamie", plusOne: false },
-  { name: "Janessa", plusOne: false },
-  { name: "Janet", plusOne: false },
-  { name: "Jasleen Sembhi", plusOne: false },
-  { name: "Jason (Ana)", plusOne: false },
-  { name: "Jason Niness", plusOne: true, plusOneName: "Ryan Illines" },
-  { name: "Jeremy Singh", plusOne: true, plusOneName: "Anusha Kalaichelvan" },
-  { name: "Jeremy Vandeline", plusOne: true, plusOneName: "Shelby Wallace" },
-  { name: "Jessica Pan", plusOne: true, plusOneName: "Garren" },
-  { name: "Jill", plusOne: false },
-  { name: "Jiping Zhu", plusOne: true, plusOneName: "Wenlan Hu" },
-  { name: "Jorda Carr", plusOne: false },
   { name: "Jordan McTaggart", plusOne: true, plusOneName: "Maggie Zhu" },
-  { name: "Julia Chen", plusOne: true, plusOneName: "Donald Wu" },
-  { name: "Julia D", plusOne: false },
-  { name: "Karl", plusOne: false },
-  { name: "Kat Chow", plusOne: false },
-  { name: "Kat Scierko", plusOne: true, plusOneName: "Mike Major" },
-  { name: "Kath Jacome", plusOne: true, plusOneName: "Adrien" },
-  { name: "Kayla", plusOne: false },
-  { name: "Kelly Hunter", plusOne: false },
-  { name: "Kevin Yang", plusOne: true, plusOneName: "Amy Huang" },
-  { name: "Kieran J", plusOne: false },
-  { name: "Leslie Foley", plusOne: false },
+  { name: "George McTaggart", plusOne: true, plusOneName: "Sabrina McTaggart" },
+  { name: "Duncan McTaggart", plusOne: true, plusOneName: "Brianne McTaggart" },
+  { name: "Wenlan Hu", plusOne: true, plusOneName: "Jiping Zhu" },
+  { name: "Andy Zhu", plusOne: false },
+  { name: "Colin Foley", plusOne: false },
+  { name: "Dustin Zhang", plusOne: true, plusOneName: "Jimin +1" },
+  { name: "Cary Pomeroy", plusOne: true, plusOneName: "Isabelle +1" },
+  { name: "Chris Weller", plusOne: true, plusOneName: "Jessica +1" },
   { name: "Liam Bolster", plusOne: true, plusOneName: "Pearl +1" },
-  { name: "Liv Kramer", plusOne: false },
-  { name: "Luke Morassut", plusOne: true, plusOneName: "Emma Harris" },
-  { name: "Luke Parham", plusOne: false },
-  { name: "Lynda", plusOne: false },
-  { name: "Maggie Zhu", plusOne: true, plusOneName: "Jordan McTaggart" },
-  { name: "Marina Favaro", plusOne: false },
-  { name: "Mary Jane", plusOne: false },
-  { name: "Mary-Liz Power", plusOne: true, plusOneName: "Duncan Tooley" },
+  { name: "Leslie Foley", plusOne: false },
   { name: "Maya Atta-Mensah", plusOne: false },
-  { name: "Maya O", plusOne: false },
-  { name: "Meg", plusOne: false },
-  { name: "Melissa Oh", plusOne: true, plusOneName: "Owen Auch" },
-  { name: "Michael", plusOne: false },
-  { name: "Mike Culmone", plusOne: true, plusOneName: "Ally Mcelwain" },
-  { name: "Mike Major", plusOne: true, plusOneName: "Kat Scierko" },
-  { name: "Mike?", plusOne: false },
-  { name: "Myron Atta-Mensah", plusOne: false },
-  { name: "Nan", plusOne: false },
+  { name: "Anna Schwartz", plusOne: false },
+  { name: "Anusha Kalaichelvan", plusOne: true, plusOneName: "Jeremy Singh" },
+  { name: "Jasleen Sembhi", plusOne: false },
+  { name: "Erika Tsang", plusOne: false },
+  { name: "Steph Ling", plusOne: true, plusOneName: "Dan Ophagh" },
+  { name: "Celine Plante", plusOne: false },
+  { name: "Mary-Liz Power", plusOne: true, plusOneName: "Duncan Tooley" },
+  { name: "Julia Chen", plusOne: true, plusOneName: "Donald Wu" },
   { name: "Natasha Dmitruk", plusOne: false },
-  { name: "Noah Grass", plusOne: true, plusOneName: "Lacy +1" },
-  { name: "Olivia Tuli", plusOne: false },
+  { name: "Jairo Pinto", plusOne: true, plusOneName: "Andrea Pinto" },
+  { name: "Luke Parham", plusOne: false },
   { name: "Owen Auch", plusOne: true, plusOneName: "Melissa Oh" },
-  { name: "Owen Somerfeld", plusOne: false },
+  { name: "Emlyn Folks", plusOne: false },
+  { name: "Fil", plusOne: false },
+  { name: "Luke Morassut", plusOne: true, plusOneName: "Emma Harris" },
+  { name: "Ahron Seeman", plusOne: true, plusOneName: "Lindsey +1" },
+  { name: "Andy Lu", plusOne: true, plusOneName: "Saydee +1" },
+  { name: "Ally Mcelwain", plusOne: true, plusOneName: "Mike Culmone" },
+  { name: "Sarah Barabas", plusOne: true, plusOneName: "Bradley Declaire" },
+  { name: "Harrison Reilly", plusOne: false },
+  { name: "Brendan Power", plusOne: true, plusOneName: "Caro Buchanan" },
+  { name: "Jessica Pan", plusOne: true, plusOneName: "Garren" },
+  { name: "Amy Huang", plusOne: true, plusOneName: "Kevin Yang" },
+  { name: "Mike Major", plusOne: true, plusOneName: "Kat Scierko" },
+  { name: "Ryan Illines", plusOne: true, plusOneName: "Jason Niness" },
+  { name: "Noah Grass", plusOne: true, plusOneName: "Lacy +1" },
+  { name: "Szu", plusOne: false },
   { name: "Phil Balson", plusOne: true, plusOneName: "Peter +1" },
   { name: "Putri Gunawan", plusOne: true, plusOneName: "Stefan Winata" },
-  { name: "Robin", plusOne: false },
-  { name: "Rory", plusOne: false },
-  { name: "Ryan Illines", plusOne: true, plusOneName: "Jason Niness" },
-  { name: "Sabrina Grandhi", plusOne: false },
-  { name: "Sabrina McTaggart", plusOne: true, plusOneName: "George McTaggart" },
-  { name: "Sam (Iris)", plusOne: false },
-  { name: "Sarah Barabas", plusOne: true, plusOneName: "Bradley Declaire" },
+  { name: "Owen Somerfeld", plusOne: false },
+  { name: "Cat Wierzba", plusOne: false },
+  { name: "Liv Kramer", plusOne: false },
+  { name: "Kath Jacome", plusOne: true, plusOneName: "Adrien Roy" },
   { name: "Sarah S Sawaya", plusOne: true, plusOneName: "Kubla +1" },
-  { name: "Sasha Rudolf", plusOne: false },
-  { name: "Scott", plusOne: false },
-  { name: "Sean", plusOne: false },
+  { name: "Sabrina Grandhi", plusOne: false },
   { name: "Shelby Wallace", plusOne: true, plusOneName: "Jeremy Vandeline" },
-  { name: "Stefan Winata", plusOne: true, plusOneName: "Putri Gunawan" },
-  { name: "Steph Ling", plusOne: true, plusOneName: "Dan Ophagh" },
-  { name: "Stephen Frey", plusOne: false },
-  { name: "Szu", plusOne: false },
-  { name: "Tate", plusOne: false },
-  { name: "Teddy", plusOne: false },
-  { name: "Tj", plusOne: false },
-  { name: "Tory", plusOne: false },
-  { name: "Vanessa", plusOne: false },
-  { name: "Wenlan Hu", plusOne: true, plusOneName: "Jiping Zhu" }
+  { name: "Meg Wood", plusOne: true, plusOneName: "Shane" },
+  { name: "Elly Rosenbaum", plusOne: true, plusOneName: "Daisy" },
+  { name: "Jordan Carr", plusOne: false },
+  { name: "Teddy Lusted", plusOne: true, plusOneName: "+1" },
+  { name: "Iris Wu", plusOne: true, plusOneName: "+1" },
+  { name: "Lynda Qin", plusOne: true, plusOneName: "Sean +1" },
+  { name: "David Patterson Cole", plusOne: true, plusOneName: "Julia Dispirito" },
+  { name: "Rory McParland", plusOne: false },
+  { name: "Kieran Jones", plusOne: true, plusOneName: "Anna +1" }
 ];
 
     function WeddingWebsite() {
       const [activeSection, setActiveSection] = useState('home');
-      const [rsvpTab, setRsvpTab] = useState('lookup'); // 'lookup', 'form', or 'embed'
+      const [rsvpTab, setRsvpTab] = useState('form'); // 'lookup', 'form', or 'embed' - default to 'form'
       const [lookupName, setLookupName] = useState('');
       const [lookupResult, setLookupResult] = useState(null);
       const [submitted, setSubmitted] = useState(false);
@@ -241,6 +172,17 @@
         weddingRequests: '',
         anythingElse: ''
       });
+
+      // Auto-scroll to RSVP section on page load
+      useEffect(() => {
+        setTimeout(() => {
+          const rsvpSection = document.getElementById('rsvp');
+          if (rsvpSection) {
+            rsvpSection.scrollIntoView({ behavior: 'smooth' });
+            setActiveSection('rsvp');
+          }
+        }, 500); // Small delay to ensure page is fully rendered
+      }, []); // Empty dependency array means this runs once on mount
 
       // ── PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE ──
       // Instructions: See RSVP-SETUP-INSTRUCTIONS.md for how to set this up
@@ -462,7 +404,7 @@
                 {[
                   { q: "Can I bring a plus one?", a: "Search your name in the RSVP section below to check your invitation. If you're not sure, feel free to ask us!" },
                   { q: "Is there parking at the venue?", a: "Yes, there's parking available at Vignoble de Chelsea on Saturday." },
-                  { q: "When should I RSVP by?", a: "Initial RSVPs by February 21st, final RSVPs by April 1st. We know life happens — just send us a message if anything changes!" },
+                  { q: "When should I RSVP by?", a: "Initial RSVPs by February 21st. We know life happens — just send us a message if anything changes!" },
                 ].map(({ q, a }) => (
                   <div key={q} className="faq-item">
                     <p className="faq-question">{q}</p>
@@ -479,7 +421,7 @@
               <h2 className="section-title">rsvp</h2>
               <div className="heart-divider"><SmallHeart /></div>
               <p style={{ fontFamily: "'Karla', sans-serif", fontSize: '14px', color: '#666', marginBottom: '2.5rem' }}>
-                initial rsvps by february 10th · final rsvps by april 1st
+                initial rsvps by february 21st
               </p>
 
               {/* Tab switcher */}
