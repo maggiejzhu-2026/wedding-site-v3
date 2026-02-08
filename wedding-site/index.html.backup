@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jordan & Maggie</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #fff; }
+    ::selection { background: #e63946; color: #fff; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .nav-link {
+      color: #1a1a1a; text-decoration: none; font-family: 'Karla', sans-serif;
+      font-size: 13px; letter-spacing: 1px; padding: 8px 0; transition: color 0.3s ease;
+      cursor: pointer; text-transform: lowercase;
+    }
+    .nav-link:hover { color: #e63946; }
+    .nav-link.active { color: #e63946; }
+    .hero-names {
+      font-size: clamp(2.5rem, 10vw, 5rem); font-weight: 400;
+      letter-spacing: 0.02em; text-transform: lowercase; animation: fadeUp 1s ease-out;
+    }
+    .section-title {
+      font-size: clamp(1.25rem, 3vw, 1.5rem); font-weight: 400;
+      text-transform: lowercase; margin-bottom: 1rem; color: #1a1a1a;
+    }
+    .btn-primary {
+      background: #1a1a1a; border: none; color: #fff; padding: 14px 40px;
+      font-family: 'Karla', sans-serif; font-size: 13px; letter-spacing: 1px;
+      text-transform: lowercase; cursor: pointer; transition: all 0.3s ease;
+    }
+    .btn-primary:hover { background: #e63946; }
+    .btn-secondary {
+      background: transparent; border: 1px solid #1a1a1a; color: #1a1a1a; padding: 12px 32px;
+      font-family: 'Karla', sans-serif; font-size: 13px; letter-spacing: 1px;
+      text-transform: lowercase; cursor: pointer; transition: all 0.3s ease;
+    }
+    .btn-secondary:hover { background: #1a1a1a; color: #fff; }
+    .input-field {
+      width: 100%; padding: 14px 16px; border: 1px solid #e0e0e0;
+      background: #fff; font-family: 'Karla', sans-serif; font-size: 15px;
+      color: #1a1a1a; transition: all 0.3s ease; outline: none;
+    }
+    .input-field:focus { border-color: #1a1a1a; }
+    .input-field::placeholder { color: #999; }
+    .divider { width: 30px; height: 1px; background: #e0e0e0; margin: 1.25rem auto; }
+    .heart-divider {
+      display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin: 1.5rem 0;
+    }
+    .heart-divider::before, .heart-divider::after {
+      content: ''; width: 30px; height: 1px; background: #e0e0e0;
+    }
+    .venue-link { color: #e63946; text-decoration: none; transition: opacity 0.3s ease; }
+    .venue-link:hover { opacity: 0.7; }
+    .faq-item { text-align: left; padding: 1.25rem 0; border-bottom: 1px solid #f0f0f0; }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-question { font-family: 'Karla', sans-serif; font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 0.4rem; }
+    .faq-answer { font-size: 14px; line-height: 1.6; color: #666; }
+    /* Guest list lookup styles */
+    .guest-lookup {
+      background: #fff; border: 1px solid #e0e0e0; padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .guest-result {
+      padding: 1rem; margin-top: 1rem; font-family: 'Karla', sans-serif; font-size: 14px;
+    }
+    .guest-result.found { background: #f0faf0; border-left: 3px solid #4caf50; }
+    .guest-result.not-found { background: #fafafa; border-left: 3px solid #e0e0e0; }
+    .tab-buttons { display: flex; gap: 0; margin-bottom: 2rem; }
+    .tab-btn {
+      flex: 1; padding: 12px; font-family: 'Karla', sans-serif; font-size: 13px;
+      letter-spacing: 1px; text-transform: lowercase; cursor: pointer;
+      border: 1px solid #e0e0e0; background: #fff; color: #666; transition: all 0.2s;
+    }
+    .tab-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+    .iframe-rsvp { width: 100%; border: none; min-height: 600px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState } = React;
+
+    // ── Guest list with +1 info (edit this list) ──
+    const GUEST_LIST = [
+  { name: "Adrien", plusOne: true, plusOneName: "Kath Jacome" },
+  { name: "Ahron Seeman", plusOne: true, plusOneName: "Lindsey +1" },
+  { name: "Alaina", plusOne: false },
+  { name: "Ally Mcelwain", plusOne: true, plusOneName: "Mike Culmone" },
+  { name: "Amy Huang", plusOne: true, plusOneName: "Kevin Yang" },
+  { name: "Ana", plusOne: false },
+  { name: "Andrea Pinto", plusOne: true, plusOneName: "Jairo Pinto" },
+  { name: "Andrew (Marina) Shields", plusOne: false },
+  { name: "Andy Lu", plusOne: true, plusOneName: "Saydee +1" },
+  { name: "Andy Zhu", plusOne: false },
+  { name: "Anna (Kieran)", plusOne: false },
+  { name: "Anna Schwartz", plusOne: false },
+  { name: "Anne", plusOne: false },
+  { name: "Anusha Kalaichelvan", plusOne: true, plusOneName: "Jeremy Singh" },
+  { name: "Ben", plusOne: false },
+  { name: "Ben Walker", plusOne: false },
+  { name: "Bradley Declaire", plusOne: true, plusOneName: "Sarah Barabas" },
+  { name: "Brendan Power", plusOne: true, plusOneName: "Caro Buchanan" },
+  { name: "Brian", plusOne: false },
+  { name: "Brianne McTaggart", plusOne: true, plusOneName: "Duncan McTaggart" },
+  { name: "Caro Buchanan", plusOne: true, plusOneName: "Brendan Power" },
+  { name: "Cary Pomeroy", plusOne: true, plusOneName: "Isabelle +1" },
+  { name: "Cat Wierzba", plusOne: false },
+  { name: "Celine Plante", plusOne: false },
+  { name: "Chanelle", plusOne: false },
+  { name: "Chris (Kat'S Bf)", plusOne: false },
+  { name: "Chris Weller", plusOne: true, plusOneName: "Jessica +1" },
+  { name: "Claire", plusOne: false },
+  { name: "Colin Foley", plusOne: false },
+  { name: "Daisy (Elly)", plusOne: true, plusOneName: "Elly" },
+  { name: "Dan Boulanger", plusOne: false },
+  { name: "Dan Ophagh", plusOne: true, plusOneName: "Steph Ling" },
+  { name: "Danielle", plusOne: false },
+  { name: "David", plusOne: false },
+  { name: "Donald Wu", plusOne: true, plusOneName: "Julia Chen" },
+  { name: "Dpc", plusOne: false },
+  { name: "Duncan McTaggart", plusOne: true, plusOneName: "Brianne McTaggart" },
+  { name: "Duncan Tooley", plusOne: true, plusOneName: "Mary-Liz Power" },
+  { name: "Dustin Zhang", plusOne: true, plusOneName: "Jimin +1" },
+  { name: "Elia", plusOne: false },
+  { name: "Elly", plusOne: true, plusOneName: "Daisy (Elly)" },
+  { name: "Emlyn Folks", plusOne: false },
+  { name: "Emma Harris", plusOne: true, plusOneName: "Luke Morassut" },
+  { name: "Erika Tsang", plusOne: false },
+  { name: "Fil", plusOne: false },
+  { name: "Garren", plusOne: true, plusOneName: "Jessica Pan" },
+  { name: "George McTaggart", plusOne: true, plusOneName: "Sabrina McTaggart" },
+  { name: "Harold", plusOne: false },
+  { name: "Harrison Reilly", plusOne: false },
+  { name: "Holly", plusOne: false },
+  { name: "Ian", plusOne: false },
+  { name: "Iris Wu", plusOne: false },
+  { name: "Jairo Pinto", plusOne: true, plusOneName: "Andrea Pinto" },
+  { name: "Jake", plusOne: false },
+  { name: "Jamie", plusOne: false },
+  { name: "Janessa", plusOne: false },
+  { name: "Janet", plusOne: false },
+  { name: "Jasleen Sembhi", plusOne: false },
+  { name: "Jason (Ana)", plusOne: false },
+  { name: "Jason Niness", plusOne: true, plusOneName: "Ryan Illines" },
+  { name: "Jeremy Singh", plusOne: true, plusOneName: "Anusha Kalaichelvan" },
+  { name: "Jeremy Vandeline", plusOne: true, plusOneName: "Shelby Wallace" },
+  { name: "Jessica Pan", plusOne: true, plusOneName: "Garren" },
+  { name: "Jill", plusOne: false },
+  { name: "Jiping Zhu", plusOne: true, plusOneName: "Wenlan Hu" },
+  { name: "Jorda Carr", plusOne: false },
+  { name: "Jordan McTaggart", plusOne: true, plusOneName: "Maggie Zhu" },
+  { name: "Julia Chen", plusOne: true, plusOneName: "Donald Wu" },
+  { name: "Julia D", plusOne: false },
+  { name: "Karl", plusOne: false },
+  { name: "Kat Chow", plusOne: false },
+  { name: "Kat Scierko", plusOne: true, plusOneName: "Mike Major" },
+  { name: "Kath Jacome", plusOne: true, plusOneName: "Adrien" },
+  { name: "Kayla", plusOne: false },
+  { name: "Kelly Hunter", plusOne: false },
+  { name: "Kevin Yang", plusOne: true, plusOneName: "Amy Huang" },
+  { name: "Kieran J", plusOne: false },
+  { name: "Leslie Foley", plusOne: false },
+  { name: "Liam Bolster", plusOne: true, plusOneName: "Pearl +1" },
+  { name: "Liv Kramer", plusOne: false },
+  { name: "Luke Morassut", plusOne: true, plusOneName: "Emma Harris" },
+  { name: "Luke Parham", plusOne: false },
+  { name: "Lynda", plusOne: false },
+  { name: "Maggie Zhu", plusOne: true, plusOneName: "Jordan McTaggart" },
+  { name: "Marina Favaro", plusOne: false },
+  { name: "Mary Jane", plusOne: false },
+  { name: "Mary-Liz Power", plusOne: true, plusOneName: "Duncan Tooley" },
+  { name: "Maya Atta-Mensah", plusOne: false },
+  { name: "Maya O", plusOne: false },
+  { name: "Meg", plusOne: false },
+  { name: "Melissa Oh", plusOne: true, plusOneName: "Owen Auch" },
+  { name: "Michael", plusOne: false },
+  { name: "Mike Culmone", plusOne: true, plusOneName: "Ally Mcelwain" },
+  { name: "Mike Major", plusOne: true, plusOneName: "Kat Scierko" },
+  { name: "Mike?", plusOne: false },
+  { name: "Myron Atta-Mensah", plusOne: false },
+  { name: "Nan", plusOne: false },
+  { name: "Natasha Dmitruk", plusOne: false },
+  { name: "Noah Grass", plusOne: true, plusOneName: "Lacy +1" },
+  { name: "Olivia Tuli", plusOne: false },
+  { name: "Owen Auch", plusOne: true, plusOneName: "Melissa Oh" },
+  { name: "Owen Somerfeld", plusOne: false },
+  { name: "Phil Balson", plusOne: true, plusOneName: "Peter +1" },
+  { name: "Putri Gunawan", plusOne: true, plusOneName: "Stefan Winata" },
+  { name: "Robin", plusOne: false },
+  { name: "Rory", plusOne: false },
+  { name: "Ryan Illines", plusOne: true, plusOneName: "Jason Niness" },
+  { name: "Sabrina Grandhi", plusOne: false },
+  { name: "Sabrina McTaggart", plusOne: true, plusOneName: "George McTaggart" },
+  { name: "Sam (Iris)", plusOne: false },
+  { name: "Sarah Barabas", plusOne: true, plusOneName: "Bradley Declaire" },
+  { name: "Sarah S Sawaya", plusOne: true, plusOneName: "Kubla +1" },
+  { name: "Sasha Rudolf", plusOne: false },
+  { name: "Scott", plusOne: false },
+  { name: "Sean", plusOne: false },
+  { name: "Shelby Wallace", plusOne: true, plusOneName: "Jeremy Vandeline" },
+  { name: "Stefan Winata", plusOne: true, plusOneName: "Putri Gunawan" },
+  { name: "Steph Ling", plusOne: true, plusOneName: "Dan Ophagh" },
+  { name: "Stephen Frey", plusOne: false },
+  { name: "Szu", plusOne: false },
+  { name: "Tate", plusOne: false },
+  { name: "Teddy", plusOne: false },
+  { name: "Tj", plusOne: false },
+  { name: "Tory", plusOne: false },
+  { name: "Vanessa", plusOne: false },
+  { name: "Wenlan Hu", plusOne: true, plusOneName: "Jiping Zhu" }
+];
+
+    function WeddingWebsite() {
+      const [activeSection, setActiveSection] = useState('home');
+      const [rsvpTab, setRsvpTab] = useState('lookup'); // 'lookup', 'form', or 'embed'
+      const [lookupName, setLookupName] = useState('');
+      const [lookupResult, setLookupResult] = useState(null);
+      const [submitted, setSubmitted] = useState(false);
+      const [rsvpData, setRsvpData] = useState({
+        name: '', email: '', attending: '', guests: '1', dietaryNeeds: '', song: ''
+      });
+
+      // ── PASTE YOUR GOOGLE FORM OR TYPEFORM EMBED URL HERE ──
+      const FORM_EMBED_URL = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true";
+      // For Typeform, use: "https://form.typeform.com/to/YOUR_FORM_ID"
+
+      const scrollToSection = (id) => {
+        setActiveSection(id);
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+      };
+
+      const handleLookup = (e) => {
+        e.preventDefault();
+        const query = lookupName.trim().toLowerCase();
+        const match = GUEST_LIST.find(g =>
+          g.name.toLowerCase().includes(query) ||
+          (g.plusOneName && g.plusOneName.toLowerCase().includes(query))
+        );
+        setLookupResult(match ? { found: true, guest: match } : { found: false });
+      };
+
+      const handleRsvp = (e) => {
+        e.preventDefault();
+        setSubmitted(true);
+      };
+
+      const StickCouple = ({ width = 220 }) => (
+        <svg width={width} viewBox="0 0 220 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+          {/* Person 1 */}
+          <circle cx="75" cy="40" r="18" stroke="#1a1a1a" strokeWidth="2.5"/>
+          <line x1="75" y1="58" x2="75" y2="120" stroke="#1a1a1a" strokeWidth="2.5"/>
+          <line x1="75" y1="80" x2="50" y2="105" stroke="#1a1a1a" strokeWidth="2.5"/>
+          <line x1="75" y1="80" x2="95" y2="100" stroke="#1a1a1a" strokeWidth="2.5"/>
+          <line x1="75" y1="120" x2="55" y2="155" stroke="#1a1a1a" strokeWidth="2.5"/>
+          <line x1="75" y1="120" x2="92" y2="155" stroke="#1a1a1a" strokeWidth="2.5"/>
+          {/* Person 2 */}
+          <circle cx="145" cy="40" r="18" stroke="#1a1a1a" strokeWidth="2.5"/>
+          <line x1="145" y1="58" x2="145" y2="120" stroke="#1a1a1a" strokeWidth="2.5"/>
+          <line x1="145" y1="80" x2="125" y2="100" stroke="#1a1a1a" strokeWidth="2.5"/>
+          <line x1="145" y1="80" x2="170" y2="105" stroke="#1a1a1a" strokeWidth="2.5"/>
+          <line x1="145" y1="120" x2="128" y2="155" stroke="#1a1a1a" strokeWidth="2.5"/>
+          <line x1="145" y1="120" x2="165" y2="155" stroke="#1a1a1a" strokeWidth="2.5"/>
+          {/* Holding hands */}
+          <line x1="95" y1="100" x2="110" y2="108" stroke="#1a1a1a" strokeWidth="2.5"/>
+          <line x1="125" y1="100" x2="110" y2="108" stroke="#1a1a1a" strokeWidth="2.5"/>
+          {/* Heart */}
+          <path d="M110 10 C110 6 106 4 106 7 C106 10 110 14 110 14 C110 14 114 10 114 7 C114 4 110 6 110 10Z" fill="#e63946"/>
+        </svg>
+      );
+
+      const SmallHeart = () => (
+        <svg width="12" height="12" viewBox="0 0 20 20" fill="#e63946">
+          <path d="M10 18 C10 18 2 12 2 7 C2 3 5 1 10 5 C15 1 18 3 18 7 C18 12 10 18 10 18Z"/>
+        </svg>
+      );
+
+      const DrinksIcon = () => (
+        <svg width="36" height="36" viewBox="0 0 50 50" fill="none" stroke="#ccc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M15 8 L15 8 L11 20 Q11 24 15 24 Q19 24 19 20 L15 8" />
+          <line x1="15" y1="24" x2="15" y2="38" />
+          <line x1="10" y1="38" x2="20" y2="38" />
+          <rect x="28" y="12" width="12" height="22" rx="2" />
+          <path d="M40 16 Q46 16 46 22 Q46 28 40 28" />
+        </svg>
+      );
+
+      const CeremonyIcon = () => (
+        <svg width="36" height="36" viewBox="0 0 50 50" fill="none" stroke="#ccc" strokeWidth="2" strokeLinecap="round">
+          <circle cx="18" cy="25" r="10" />
+          <circle cx="32" cy="25" r="10" />
+          <path d="M25 12 C25 10 23 9 23 10.5 C23 12 25 14 25 14 C25 14 27 12 27 10.5 C27 9 25 10 25 12Z" fill="#e63946" stroke="none"/>
+        </svg>
+      );
+
+      const ShuttleIcon = () => (
+        <svg width="36" height="36" viewBox="0 0 50 50" fill="none" stroke="#ccc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="6" y="16" width="38" height="18" rx="3" />
+          <rect x="11" y="20" width="7" height="6" rx="1" />
+          <rect x="21" y="20" width="7" height="6" rx="1" />
+          <rect x="31" y="20" width="7" height="6" rx="1" />
+          <circle cx="14" cy="34" r="3" />
+          <circle cx="36" cy="34" r="3" />
+        </svg>
+      );
+
+      return (
+        <div style={{
+          fontFamily: "'Libre Baskerville', Georgia, serif",
+          background: '#ffffff', minHeight: '100vh', color: '#1a1a1a', position: 'relative'
+        }}>
+          {/* Navigation */}
+          <nav style={{
+            position: 'fixed', top: 0, left: 0, right: 0,
+            padding: '1.5rem 2rem', display: 'flex', justifyContent: 'center',
+            gap: '2.5rem', background: 'rgba(255,255,255,0.98)', zIndex: 1000,
+            borderBottom: '1px solid #f0f0f0', flexWrap: 'wrap'
+          }}>
+            {['home', 'day-before', 'details', 'travel', 'faq', 'rsvp'].map((section) => (
+              <span key={section} className={`nav-link ${activeSection === section ? 'active' : ''}`}
+                onClick={() => scrollToSection(section)}>
+                {section === 'day-before' ? 'the day before' : section === 'details' ? 'the day' : section}
+              </span>
+            ))}
+          </nav>
+
+          {/* Hero */}
+          <section id="home" style={{
+            minHeight: '100vh', display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '6rem 2rem 4rem'
+          }}>
+            <h1 className="hero-names">
+              jordan <span style={{ color: '#e63946' }}>&</span> maggie
+            </h1>
+            <div style={{ margin: '3rem 0', animation: 'fadeUp 1s ease-out 0.3s both' }}>
+              <StickCouple width={280} />
+            </div>
+            <p style={{ fontFamily: "'Karla', sans-serif", fontSize: '16px', letterSpacing: '1px', color: '#1a1a1a', textTransform: 'lowercase', animation: 'fadeUp 1s ease-out 0.5s both' }}>
+              may 30, 2026
+            </p>
+            <p style={{ fontFamily: "'Karla', sans-serif", fontSize: '14px', color: '#666', textTransform: 'lowercase', marginTop: '0.5rem', animation: 'fadeUp 1s ease-out 0.6s both' }}>
+              ottawa, canada
+            </p>
+            <p style={{ maxWidth: '400px', fontFamily: "'Karla', sans-serif", fontSize: '14px', lineHeight: 1.8, color: '#888', marginTop: '2.5rem', animation: 'fadeUp 1s ease-out 0.8s both' }}>
+              We can't wait to celebrate with the people who mean the most to us. Thank you for making the trip to share this day with us.
+            </p>
+          </section>
+
+          {/* Day Before */}
+          <section id="day-before" style={{ padding: '6rem 2rem', background: '#fafafa' }}>
+            <div style={{ maxWidth: '500px', margin: '0 auto', textAlign: 'center' }}>
+              <h2 className="section-title">the day before</h2>
+              <div className="heart-divider"><SmallHeart /></div>
+              <p style={{ fontFamily: "'Karla', sans-serif", fontSize: '13px', letterSpacing: '1px', textTransform: 'lowercase', color: '#999', marginBottom: '1.5rem' }}>friday, may 29th</p>
+              <div>
+                <div style={{ marginBottom: '1rem' }}><DrinksIcon /></div>
+                <p style={{ fontFamily: "'Karla', sans-serif", fontSize: '13px', letterSpacing: '1px', textTransform: 'lowercase', color: '#666', marginBottom: '1rem' }}>welcome drinks</p>
+                <p style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Tavern on the Hill</p>
+                <p style={{ fontSize: '1rem', color: '#666' }}>6:00pm – 9:00pm</p>
+                <div className="divider" />
+                <p style={{ fontSize: '1rem', lineHeight: 1.7, color: '#333' }}>Join us for casual drinks the night before the wedding</p>
+                <p style={{ fontSize: '0.9rem', color: '#666', marginTop: '1rem' }}>dress code: casual</p>
+                <a href="https://www.google.com/maps/search/?api=1&query=Tavern+on+the+Hill+Major%27s+Hill+Park+Ottawa" target="_blank" rel="noopener noreferrer" className="venue-link" style={{ fontSize: '0.9rem', display: 'inline-block', marginTop: '0.75rem' }}>
+                  view on google maps →
+                </a>
+              </div>
+            </div>
+          </section>
+
+          {/* The Day */}
+          <section id="details" style={{ padding: '6rem 2rem', background: '#ffffff' }}>
+            <div style={{ maxWidth: '500px', margin: '0 auto', textAlign: 'center' }}>
+              <h2 className="section-title">the day</h2>
+              <div className="heart-divider"><SmallHeart /></div>
+              <p style={{ fontFamily: "'Karla', sans-serif", fontSize: '13px', letterSpacing: '1px', textTransform: 'lowercase', color: '#999', marginBottom: '1.5rem' }}>saturday, may 30th</p>
+              <div>
+                <div style={{ marginBottom: '1rem' }}><CeremonyIcon /></div>
+                <p style={{ fontFamily: "'Karla', sans-serif", fontSize: '13px', letterSpacing: '1px', textTransform: 'lowercase', color: '#666', marginBottom: '1rem' }}>ceremony & reception</p>
+                <p style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Vignoble de Chelsea</p>
+                <p style={{ fontSize: '1rem', color: '#666' }}>4:00pm – 11:00pm</p>
+                <p style={{ fontSize: '0.9rem', color: '#999', marginTop: '0.25rem' }}>30 min from downtown Ottawa</p>
+                <div className="divider" />
+                <p style={{ fontSize: '0.9rem', color: '#666', marginTop: '1rem' }}>dress code: garden formal</p>
+                <a href="https://www.google.com/maps/search/?api=1&query=Vignoble+de+Chelsea+1582+Route+105+Chelsea+Quebec" target="_blank" rel="noopener noreferrer" className="venue-link" style={{ fontSize: '0.9rem', display: 'inline-block', marginTop: '0.75rem' }}>
+                  view on google maps →
+                </a>
+              </div>
+              <div style={{ marginTop: '2rem' }}>
+                <div style={{ marginBottom: '1rem' }}><ShuttleIcon /></div>
+                <p style={{ fontFamily: "'Karla', sans-serif", fontSize: '13px', letterSpacing: '1px', textTransform: 'lowercase', color: '#666', marginBottom: '1rem' }}>getting there & back</p>
+                <p style={{ fontSize: '1rem', lineHeight: 1.8, color: '#333', marginBottom: '0.5rem' }}><strong style={{ color: '#1a1a1a' }}>there:</strong> grab an Uber to the venue</p>
+                <p style={{ fontSize: '1rem', lineHeight: 1.8, color: '#333' }}><strong style={{ color: '#1a1a1a' }}>back:</strong> shuttle to downtown Ottawa at the end of the night</p>
+              </div>
+            </div>
+          </section>
+
+          {/* Travel */}
+          <section id="travel" style={{ padding: '6rem 2rem', background: '#fafafa' }}>
+            <div style={{ maxWidth: '500px', margin: '0 auto', textAlign: 'center' }}>
+              <h2 className="section-title">travel & stay</h2>
+              <div className="heart-divider"><SmallHeart /></div>
+              <p style={{ fontSize: '1rem', lineHeight: 1.8, color: '#333', marginTop: '2rem' }}>
+                We recommend staying in downtown Ottawa — there's lots to see and do, and it's an easy Uber ride to both venues.
+              </p>
+              <p style={{ fontSize: '1rem', lineHeight: 1.8, color: '#333', marginTop: '1.5rem' }}>
+                <strong style={{ color: '#1a1a1a' }}>Flying in?</strong><br />
+                Ottawa Airport (YOW) is about 20 minutes from downtown.
+              </p>
+            </div>
+          </section>
+
+          {/* FAQ */}
+          <section id="faq" style={{ padding: '6rem 2rem', background: '#ffffff' }}>
+            <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
+              <h2 className="section-title">questions</h2>
+              <div className="heart-divider"><SmallHeart /></div>
+              <div style={{ marginTop: '2rem' }}>
+                {[
+                  { q: "Are kids invited?", a: "Please reach out to us — we're happy to chat about it!" },
+                  { q: "Can I bring a plus one?", a: "Search your name in the RSVP section below to check your invitation. If you're not sure, feel free to ask us!" },
+                  { q: "Is there parking at the venue?", a: "Yes, there's parking available at Vignoble de Chelsea on Saturday." },
+                  { q: "When should I RSVP by?", a: "Initial RSVPs by February 10th, final RSVPs by April 1st. We know life happens — just send us a message if anything changes!" },
+                  { q: "Where are you registered?", a: "Your presence is the best gift! Traveling to celebrate with us is more than enough." },
+                ].map(({ q, a }) => (
+                  <div key={q} className="faq-item">
+                    <p className="faq-question">{q}</p>
+                    <p className="faq-answer">{a}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* RSVP */}
+          <section id="rsvp" style={{ padding: '6rem 2rem', background: '#fafafa' }}>
+            <div style={{ maxWidth: '500px', margin: '0 auto', textAlign: 'center' }}>
+              <h2 className="section-title">rsvp</h2>
+              <div className="heart-divider"><SmallHeart /></div>
+              <p style={{ fontFamily: "'Karla', sans-serif", fontSize: '14px', color: '#666', marginBottom: '2.5rem' }}>
+                initial rsvps by february 10th · final rsvps by april 1st
+              </p>
+
+              {/* Tab switcher */}
+              <div className="tab-buttons">
+                <button className={`tab-btn ${rsvpTab === 'lookup' ? 'active' : ''}`} onClick={() => setRsvpTab('lookup')}>
+                  check my invite
+                </button>
+                <button className={`tab-btn ${rsvpTab === 'embed' ? 'active' : ''}`} onClick={() => setRsvpTab('embed')}>
+                  rsvp now
+                </button>
+              </div>
+
+              {rsvpTab === 'lookup' && (
+                <div className="guest-lookup">
+                  <p style={{ fontFamily: "'Karla', sans-serif", fontSize: '13px', color: '#666', marginBottom: '1.25rem' }}>
+                    enter your name to check if you have a +1
+                  </p>
+                  <form onSubmit={handleLookup}>
+                    <input
+                      type="text"
+                      className="input-field"
+                      placeholder="your name"
+                      value={lookupName}
+                      onChange={(e) => { setLookupName(e.target.value); setLookupResult(null); }}
+                      required
+                    />
+                    <div style={{ marginTop: '1rem' }}>
+                      <button type="submit" className="btn-primary">look up</button>
+                    </div>
+                  </form>
+
+                  {lookupResult && lookupResult.found && (
+                    <div className="guest-result found">
+                      <p style={{ fontWeight: 500 }}>hi, {lookupResult.guest.name}!</p>
+                      {lookupResult.guest.plusOne ? (
+                        <p style={{ marginTop: '0.5rem', color: '#333' }}>
+                          {lookupResult.guest.plusOneName && lookupResult.guest.plusOneName.includes('+1') ? (
+                            <>you're invited with a +1. 🎉</>
+                          ) : lookupResult.guest.plusOneName ? (
+                            <>you and {lookupResult.guest.plusOneName} are invited together. 🎉</>
+                          ) : (
+                            <>you're invited with a +1. 🎉</>
+                          )}
+                        </p>
+                      ) : (
+                        <p style={{ marginTop: '0.5rem', color: '#333' }}>
+                          your invitation is for you alone. if you have questions, reach out to us!
+                        </p>
+                      )}
+                    </div>
+                  )}
+                  {lookupResult && !lookupResult.found && (
+                    <div className="guest-result not-found">
+                      <p>we couldn't find that name. try your full name as it appears on your invitation, or reach out to us directly.</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {rsvpTab === 'form' && !submitted && (
+                <form onSubmit={handleRsvp} style={{ textAlign: 'left' }}>
+                  {[
+                    { label: 'your name', key: 'name', type: 'text', placeholder: 'as it appears on your invitation' },
+                    { label: 'email', key: 'email', type: 'email', placeholder: 'your@email.com' },
+                  ].map(({ label, key, type, placeholder }) => (
+                    <div key={key} style={{ marginBottom: '1.25rem' }}>
+                      <label style={{ display: 'block', fontFamily: "'Karla', sans-serif", fontSize: '12px', letterSpacing: '1px', textTransform: 'lowercase', color: '#666', marginBottom: '0.5rem' }}>{label}</label>
+                      <input type={type} className="input-field" placeholder={placeholder} value={rsvpData[key]} onChange={(e) => setRsvpData({...rsvpData, [key]: e.target.value})} required />
+                    </div>
+                  ))}
+
+                  <div style={{ marginBottom: '1.25rem' }}>
+                    <label style={{ display: 'block', fontFamily: "'Karla', sans-serif", fontSize: '12px', letterSpacing: '1px', textTransform: 'lowercase', color: '#666', marginBottom: '0.5rem' }}>will you be joining us?</label>
+                    <select className="input-field" value={rsvpData.attending} onChange={(e) => setRsvpData({...rsvpData, attending: e.target.value})} required style={{ cursor: 'pointer' }}>
+                      <option value="">please select...</option>
+                      <option value="yes">definitely celebrating with you!</option>
+                      <option value="maybe">still working out the details</option>
+                      <option value="no">unable to make it</option>
+                    </select>
+                  </div>
+
+                  {(rsvpData.attending === 'yes' || rsvpData.attending === 'maybe') && (
+                    <>
+                      <div style={{ marginBottom: '1.25rem' }}>
+                        <label style={{ display: 'block', fontFamily: "'Karla', sans-serif", fontSize: '12px', letterSpacing: '1px', textTransform: 'lowercase', color: '#666', marginBottom: '0.5rem' }}>number of guests</label>
+                        <select className="input-field" value={rsvpData.guests} onChange={(e) => setRsvpData({...rsvpData, guests: e.target.value})} style={{ cursor: 'pointer' }}>
+                          {['1','2','3','4'].map(n => <option key={n} value={n}>{n}</option>)}
+                        </select>
+                      </div>
+                      <div style={{ marginBottom: '1.25rem' }}>
+                        <label style={{ display: 'block', fontFamily: "'Karla', sans-serif", fontSize: '12px', letterSpacing: '1px', textTransform: 'lowercase', color: '#666', marginBottom: '0.5rem' }}>dietary requirements</label>
+                        <input type="text" className="input-field" placeholder="allergies, vegetarian, etc." value={rsvpData.dietaryNeeds} onChange={(e) => setRsvpData({...rsvpData, dietaryNeeds: e.target.value})} />
+                      </div>
+                      <div style={{ marginBottom: '1.5rem' }}>
+                        <label style={{ display: 'block', fontFamily: "'Karla', sans-serif", fontSize: '12px', letterSpacing: '1px', textTransform: 'lowercase', color: '#666', marginBottom: '0.5rem' }}>song request</label>
+                        <input type="text" className="input-field" placeholder="what gets you on the dance floor?" value={rsvpData.song} onChange={(e) => setRsvpData({...rsvpData, song: e.target.value})} />
+                      </div>
+                    </>
+                  )}
+
+                  <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+                    <button type="submit" className="btn-primary">send rsvp</button>
+                  </div>
+                </form>
+              )}
+
+              {rsvpTab === 'form' && submitted && (
+                <div style={{ padding: '2.5rem', background: '#ffffff', border: '1px solid #e0e0e0', animation: 'fadeUp 0.5s ease-out' }}>
+                  <p style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>thank you!</p>
+                  <p style={{ fontSize: '1rem', color: '#666' }}>we can't wait to celebrate with you</p>
+                </div>
+              )}
+
+              {rsvpTab === 'embed' && (
+                <div style={{ background: '#fff', border: '1px solid #e0e0e0', overflow: 'hidden' }}>
+                  <iframe
+                    src={FORM_EMBED_URL}
+                    className="iframe-rsvp"
+                    frameBorder="0"
+                    marginHeight="0"
+                    marginWidth="0"
+                  >
+                    Loading…
+                  </iframe>
+                </div>
+              )}
+            </div>
+          </section>
+
+          {/* Footer */}
+          <footer style={{ padding: '4rem 2rem', textAlign: 'center', background: '#ffffff' }}>
+            <StickCouple width={120} />
+          </footer>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<WeddingWebsite />);
+  </script>
+</body>
+</html>

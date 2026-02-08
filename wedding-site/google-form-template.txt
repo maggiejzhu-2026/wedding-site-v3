@@ -1,0 +1,91 @@
+GOOGLE FORM SETUP - COPY & PASTE
+
+Title: Jordan & Maggie's Wedding RSVP
+
+Description:
+We can't wait to celebrate with you! Please fill out this form to let us know if you'll be joining us on May 30, 2026.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+QUESTION 1: Name *
+Type: Short answer
+Required: Yes
+Description: As it appears on your invitation
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+QUESTION 2: Email Address *
+Type: Short answer
+Required: Yes
+Description: We'll send you updates and details here
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+QUESTION 3: Will you be joining us? *
+Type: Multiple choice
+Required: Yes
+Options:
+○ Yes! I'll definitely be there 🎉
+○ Still working out the details
+○ Unfortunately, I can't make it
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+QUESTION 4: Number of guests (including yourself) *
+Type: Multiple choice
+Required: Yes (only show if Q3 is "Yes" or "Still working out")
+Options:
+○ 1
+○ 2
+○ 3
+○ 4
+
+Note: If you selected 2+, please list names below
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+QUESTION 5: Guest Names
+Type: Long answer
+Required: No
+Description: If bringing guests, please list their names
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+QUESTION 6: Dietary Requirements
+Type: Long answer
+Required: No
+Description: Please let us know about any allergies or dietary restrictions (vegetarian, vegan, gluten-free, etc.)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+QUESTION 7: Song Request 🎵
+Type: Short answer
+Required: No
+Description: What song would get you on the dance floor?
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+QUESTION 8: Message to the Couple
+Type: Long answer
+Required: No
+Description: Any messages, questions, or special requests for us?
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SETTINGS TO CONFIGURE:
+
+1. Responses Tab:
+   - ✓ Collect email addresses
+   - ✓ Response receipts: Always
+   - ✓ Limit to 1 response per person
+
+2. Presentation Tab:
+   - ✓ Show progress bar
+   - Confirmation message: "Thank you for your RSVP! We can't wait to celebrate with you on May 30, 2026. If you have any questions, feel free to reach out to us directly."
+
+3. Theme:
+   - Header color: #e63946 (your wedding red)
+   - Background color: #fafafa
+   - Font: Karla or similar sans-serif
+
+4. Add your stick figure couple image as the header image!
