@@ -340,7 +340,7 @@
               ottawa, canada
             </p>
             <p style={{ maxWidth: '400px', fontFamily: "'Karla', sans-serif", fontSize: '14px', lineHeight: 1.8, color: '#888', marginTop: '2.5rem', animation: 'fadeUp 1s ease-out 0.8s both' }}>
-              We can't wait to celebrate with the people who mean the most to us. Thank you for making the trip to share this day with us.
+              We can't wait to celebrate with you! Thank you for making the trip to share this day with us.
             </p>
           </section>
 
@@ -353,7 +353,7 @@
               <div>
                 <div style={{ marginBottom: '1rem' }}><DrinksIcon /></div>
                 <p style={{ fontFamily: "'Karla', sans-serif", fontSize: '13px', letterSpacing: '1px', textTransform: 'lowercase', color: '#666', marginBottom: '1rem' }}>welcome drinks</p>
-                <p style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Tavern on the Hill</p>
+                <p style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Tavern on the Hill (or nearby)</p>
                 <p style={{ fontSize: '1rem', color: '#666' }}>6:00pm – 9:00pm</p>
                 <div className="divider" />
                 <p style={{ fontSize: '1rem', lineHeight: 1.7, color: '#333' }}>Join us for casual drinks the night before the wedding</p>
@@ -390,7 +390,7 @@
               <h2 className="section-title">travel & stay</h2>
               <div className="heart-divider"><SmallHeart /></div>
               <p style={{ fontSize: '1rem', lineHeight: 1.8, color: '#333', marginTop: '2rem' }}>
-                We recommend staying in downtown Ottawa — there's lots to see and do, and it's an easy Uber ride to both venues.
+                We're putting together hotel recommendations and a guide to our favorite spots in Ottawa. Check back soon — in the meantime, know that downtown Ottawa is a great home base, with plenty to explore and an easy ride to both venues.
               </p>
             </div>
           </section>
@@ -404,7 +404,7 @@
                 {[
                   { q: "Can I bring a plus one?", a: "Search your name in the RSVP section below to check your invitation. If you're not sure, feel free to ask us!" },
                   { q: "Is there parking at the venue?", a: "Yes, there's parking available at Vignoble de Chelsea on Saturday." },
-                  { q: "When should I RSVP by?", a: "Initial RSVPs by February 21st. We know life happens — just send us a message if anything changes!" },
+                  { q: "When should I RSVP by?", a: "We are hoping to collect initial RSVPs by February 21st. We know life happens — just send us a message if anything changes!" },
                 ].map(({ q, a }) => (
                   <div key={q} className="faq-item">
                     <p className="faq-question">{q}</p>
@@ -526,7 +526,7 @@
                   {/* Email */}
                   <div style={{ marginBottom: '1.25rem' }}>
                     <label style={{ display: 'block', fontFamily: "'Karla', sans-serif", fontSize: '12px', letterSpacing: '1px', textTransform: 'lowercase', color: '#666', marginBottom: '0.5rem' }}>
-                      email <span style={{ fontSize: '11px', fontWeight: 300 }}>(for future updates)</span>
+                      email <span style={{ fontSize: '11px', fontWeight: 300 }}>(for future updates)</span> <span style={{ color: '#e63946' }}>*</span>
                     </label>
                     <input
                       type="email"
@@ -534,13 +534,14 @@
                       placeholder="your@email.com"
                       value={rsvpData.email}
                       onChange={(e) => setRsvpData({...rsvpData, email: e.target.value})}
+                      required
                     />
                   </div>
 
                   {/* Phone */}
                   <div style={{ marginBottom: '1.25rem' }}>
                     <label style={{ display: 'block', fontFamily: "'Karla', sans-serif", fontSize: '12px', letterSpacing: '1px', textTransform: 'lowercase', color: '#666', marginBottom: '0.5rem' }}>
-                      phone number <span style={{ fontSize: '11px', fontWeight: 300 }}>(just in case)</span>
+                      phone number <span style={{ fontSize: '11px', fontWeight: 300 }}>(just in case)</span> <span style={{ color: '#e63946' }}>*</span>
                     </label>
                     <input
                       type="tel"
@@ -548,18 +549,20 @@
                       placeholder="(555) 123-4567"
                       value={rsvpData.phone}
                       onChange={(e) => setRsvpData({...rsvpData, phone: e.target.value})}
+                      required
                     />
                   </div>
 
                   {/* Friday May 29th */}
                   <div style={{ marginBottom: '1.25rem' }}>
                     <label style={{ display: 'block', fontFamily: "'Karla', sans-serif", fontSize: '12px', letterSpacing: '1px', textTransform: 'lowercase', color: '#666', marginBottom: '0.5rem' }}>
-                      will you be joining us on friday, may 29th? <span style={{ fontSize: '11px', fontWeight: 300 }}>(welcome event)</span>
+                      will you be joining us on friday, may 29th? <span style={{ fontSize: '11px', fontWeight: 300 }}>(welcome event)</span> <span style={{ color: '#e63946' }}>*</span>
                     </label>
                     <select
                       className="input-field"
                       value={rsvpData.fridayAttending}
                       onChange={(e) => setRsvpData({...rsvpData, fridayAttending: e.target.value})}
+                      required
                       style={{ cursor: 'pointer' }}
                     >
                       <option value="">please select...</option>
@@ -625,7 +628,7 @@
                     <input
                       type="text"
                       className="input-field"
-                      placeholder="song requests, seating preferences, etc."
+                      placeholder="think big..."
                       value={rsvpData.weddingRequests}
                       onChange={(e) => setRsvpData({...rsvpData, weddingRequests: e.target.value})}
                     />
