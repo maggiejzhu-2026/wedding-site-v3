@@ -59,6 +59,7 @@
       content: ''; width: 30px; height: 1px; background: #e0e0e0;
     }
     .venue-link { color: #e63946; text-decoration: none; transition: opacity 0.3s ease; }
+    #home { padding-top: 8rem !important; }
     .venue-link:hover { opacity: 0.7; }
     .faq-item { text-align: left; padding: 1.25rem 0; border-bottom: 1px solid #f0f0f0; }
     .faq-item:last-child { border-bottom: none; }
@@ -85,6 +86,20 @@
     @media (max-width: 600px) {
       .tab-buttons { flex-direction: column; }
       .tab-btn { padding: 14px; }
+      #home { padding-top: 9rem !important; }
+      .input-field { font-size: 16px; } /* Prevents zoom on iOS */
+      .input-field::placeholder { font-size: 14px; }
+      /* Better touch targets and spacing for mobile navigation */
+      nav { padding: 1rem 1rem !important; gap: 0.5rem !important; }
+      .nav-link { padding: 10px 8px !important; font-size: 12px !important; }
+      /* Improve readability on mobile */
+      .hero-names { line-height: 1.2; }
+      .section-title { margin-bottom: 1.5rem; }
+      /* Ensure buttons are touch-friendly */
+      .btn-primary, .btn-secondary { padding: 16px 40px; min-height: 48px; }
+      /* Better spacing for mobile sections */
+      section { padding: 4rem 1.5rem !important; }
+      #home { padding: 4rem 1.5rem !important; }
     }
   </style>
 </head>
@@ -275,11 +290,14 @@
 
       const DrinksIcon = () => (
         <svg width="36" height="36" viewBox="0 0 50 50" fill="none" stroke="#ccc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M15 8 L15 8 L11 20 Q11 24 15 24 Q19 24 19 20 L15 8" />
-          <line x1="15" y1="24" x2="15" y2="38" />
-          <line x1="10" y1="38" x2="20" y2="38" />
-          <rect x="28" y="12" width="12" height="22" rx="2" />
-          <path d="M40 16 Q46 16 46 22 Q46 28 40 28" />
+          {/* Beer glass (left) - tilted */}
+          <path d="M12 16 L8 36 L16 36 L14 16 Z" transform="rotate(-15 12 26)" />
+          <line x1="8.5" y1="26" x2="15.5" y2="26" transform="rotate(-15 12 26)" />
+          {/* Wine glass (right) - tilted */}
+          <path d="M32 12 L28 24 L32 30 L32 38 M36 24 L32 12 L28 24" transform="rotate(15 32 25)" />
+          <line x1="28" y1="38" x2="36" y2="38" transform="rotate(15 32 25)" />
+          {/* Cheers sparkle */}
+          <path d="M25 10 L25 14 M23 12 L27 12" strokeWidth="1.5" />
         </svg>
       );
 
@@ -402,9 +420,10 @@
               <div className="heart-divider"><SmallHeart /></div>
               <div style={{ marginTop: '2rem' }}>
                 {[
-                  { q: "Can I bring a plus one?", a: "Search your name in the RSVP section below to check your invitation. If you're not sure, feel free to ask us!" },
+                  { q: "Can I bring a plus one?", a: "Search your name in the RSVP section below to check if your invitation includes a plus one. If you're not sure, feel free to ask us! If you have a +1, please fill out the RSVP form twice, once for each person." },
                   { q: "Is there parking at the venue?", a: "Yes, there's parking available at Vignoble de Chelsea on Saturday." },
-                  { q: "When should I RSVP by?", a: "We are hoping to collect initial RSVPs by February 21st. We know life happens — just send us a message if anything changes!" },
+                  { q: "How do I get to and from the venue?", a: "We suggest you Uber, taxi or drive (if you aren't drinking) to the venue, we are figuring out best options for transportation the way back." },
+                  { q: "What's the dress code?", a: "More details to come." },
                 ].map(({ q, a }) => (
                   <div key={q} className="faq-item">
                     <p className="faq-question">{q}</p>
@@ -421,7 +440,7 @@
               <h2 className="section-title">rsvp</h2>
               <div className="heart-divider"><SmallHeart /></div>
               <p style={{ fontFamily: "'Karla', sans-serif", fontSize: '14px', color: '#666', marginBottom: '2.5rem' }}>
-                initial rsvps by february 21st
+                rsvps by march 1st
               </p>
 
               {/* Tab switcher */}
@@ -516,7 +535,7 @@
                     <input
                       type="text"
                       className="input-field"
-                      placeholder="fill in this form twice if you have a +1"
+                      placeholder="first and last name"
                       value={rsvpData.name}
                       onChange={(e) => setRsvpData({...rsvpData, name: e.target.value})}
                       required
@@ -623,12 +642,12 @@
                   {/* Wedding Requests */}
                   <div style={{ marginBottom: '1.25rem' }}>
                     <label style={{ display: 'block', fontFamily: "'Karla', sans-serif", fontSize: '12px', letterSpacing: '1px', textTransform: 'lowercase', color: '#666', marginBottom: '0.5rem' }}>
-                      wedding requests <span style={{ fontSize: '11px', fontWeight: 300 }}>(no guarantees)</span>
+                      5 words or less that describe Jordan &/or Maggie <span style={{ fontSize: '11px', fontWeight: 300 }}>(just for fun)</span>
                     </label>
                     <input
                       type="text"
                       className="input-field"
-                      placeholder="think big..."
+                      placeholder="your words here..."
                       value={rsvpData.weddingRequests}
                       onChange={(e) => setRsvpData({...rsvpData, weddingRequests: e.target.value})}
                     />
