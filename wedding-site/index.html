@@ -133,7 +133,7 @@
   { name: "Jairo Pinto", plusOne: true, plusOneName: "Andrea Pinto" },
   { name: "Luke Parham", plusOne: false },
   { name: "Owen Auch", plusOne: true, plusOneName: "Melissa Oh" },
-  { name: "Emlyn Folkes", plusOne: false },
+  { name: "Emlyn Folks", plusOne: false },
   { name: "Fil", plusOne: false },
   { name: "Luke Morassut", plusOne: true, plusOneName: "Emma Harris" },
   { name: "Ahron Seeman", plusOne: true, plusOneName: "Lindsey +1" },
@@ -165,7 +165,13 @@
   { name: "Lynda Qin", plusOne: true, plusOneName: "Sean +1" },
   { name: "David Patterson Cole", plusOne: true, plusOneName: "Julia Dispirito" },
   { name: "Rory McParland", plusOne: false },
-  { name: "Kieran Jones", plusOne: true, plusOneName: "Anna +1" }
+  { name: "Kieran Jones", plusOne: true, plusOneName: "Anna +1" },
+  { name: "Olivia Tuli", plusOne: true, plusOneName: "Elliot Trotter" },
+  { name: "Marina Favaro", plusOne: true, plusOneName: "Andrew Shields" },
+  { name: "Myron Atta-Mensah", plusOne: false },
+  { name: "Sasha Rudolf", plusOne: false },
+  { name: "Elia Rubio", plusOne: true, plusOneName: "Netani Ross" },
+  { name: "Ana Beard", plusOne: true, plusOneName: "Jason Beard" }
 ];
 
     function WeddingWebsite() {
@@ -210,14 +216,31 @@
       const handleLookup = (e) => {
         e.preventDefault();
         const query = lookupName.trim().toLowerCase();
-        const matches = GUEST_LIST.filter(g => g.name.toLowerCase().includes(query));
 
-        if (matches.length === 0) {
+        // Search primary guest names
+        const primaryMatches = GUEST_LIST.filter(g => g.name.toLowerCase().includes(query));
+
+        // Search plus-one names (only full names, not generic "+1" entries)
+        const plusOneMatches = GUEST_LIST.filter(g =>
+          g.plusOneName &&
+          !g.plusOneName.includes('+1') &&
+          g.plusOneName.toLowerCase().includes(query)
+        ).map(g => ({
+          // Flip perspective: the plus-one is the searcher, paired with the primary guest
+          name: g.plusOneName,
+          plusOne: true,
+          plusOneName: g.name,
+          isPlusOneSearch: true
+        }));
+
+        const allMatches = [...primaryMatches, ...plusOneMatches];
+
+        if (allMatches.length === 0) {
           setLookupResult({ found: false });
-        } else if (matches.length === 1) {
-          setLookupResult({ found: true, guest: matches[0] });
+        } else if (allMatches.length === 1) {
+          setLookupResult({ found: true, guest: allMatches[0] });
         } else {
-          setLookupResult({ found: true, ambiguous: true, matches: matches });
+          setLookupResult({ found: true, ambiguous: true, matches: allMatches });
         }
       };
 
